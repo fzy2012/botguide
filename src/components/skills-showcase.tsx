@@ -1,27 +1,81 @@
 "use client";
 
 import { FadeUp, AnimatedCounter } from "./animated-text";
+import { guides } from "@/data/guides";
+
+const totalGuides = guides.length;
+const types = new Set(guides.map((g) => g.type)).size;
+const platforms = new Set(guides.map((g) => g.platform)).size;
+const featuredCount = guides.filter((g) => g.isFeatured).length;
 
 const categories = [
-  { icon: "\uD83C\uDF10", title: "网页 & 前端", count: 46, skills: ["frontend-design", "nextjs-expert", "ui-audit", "remotion-server"] },
-  { icon: "\uD83E\uDD16", title: "编程 Agent", count: 55, skills: ["coding-agent", "opencode-acp-control", "claude-team", "skill-creator"] },
-  { icon: "\u2601\uFE0F", title: "DevOps & 云", count: 144, skills: ["cloudflare", "docker-essentials", "kubernetes", "coolify"] },
-  { icon: "\uD83D\uDD0D", title: "搜索 & 研究", count: 148, skills: ["exa-plus", "deepwiki", "technews", "read-github"] },
-  { icon: "\uD83D\uDCC8", title: "营销 & 销售", count: 94, skills: ["seo-audit", "social-content", "email-sequence", "copywriting"] },
-  { icon: "\uD83E\uDDE0", title: "AI & 大模型", count: 159, skills: ["kimi-integration", "chatgpt-apps", "chromadb-memory", "agentmemory"] },
-  { icon: "\uD83C\uDFE0", title: "智能家居", count: 50, skills: ["homeassistant", "adguard", "emporia-energy", "trmnl"] },
-  { icon: "\uD83D\uDDE3\uFE0F", title: "语音 & 音频", count: 44, skills: ["aliyun-tts", "whisper", "azure-ai-voicelive", "speech-to-text"] },
-  { icon: "\uD83D\uDCAC", title: "通讯集成", count: 58, skills: ["slack", "discord", "telegram", "smtp-send"] },
-  { icon: "\uD83C\uDFCB\uFE0F", title: "健康 & 健身", count: 35, skills: ["workout-logger", "fasting-tracker", "weight-loss", "habit-tracker"] },
-  { icon: "\uD83D\uDCDD", title: "笔记 & 知识", count: 61, skills: ["logseq", "obsidian", "notion", "newsletter-digest"] },
-  { icon: "\uD83C\uDFAE", title: "游戏", count: 7, skills: ["dnd", "moltpet", "bot-bowl-party", "winamp"] },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-6 w-6 text-accent">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+      </svg>
+    ),
+    title: "官方文档",
+    desc: "第一手权威资料",
+    tag: "Official",
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-6 w-6 text-accent">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+      </svg>
+    ),
+    title: "教程指南",
+    desc: "循序渐进学习",
+    tag: "Tutorial",
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-6 w-6 text-accent">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+      </svg>
+    ),
+    title: "深度文章",
+    desc: "案例与深度分析",
+    tag: "Article",
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-6 w-6 text-accent">
+        <path strokeLinecap="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
+      </svg>
+    ),
+    title: "视频课程",
+    desc: "可视化学习体验",
+    tag: "Video",
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-6 w-6 text-accent">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+      </svg>
+    ),
+    title: "资源合集",
+    desc: "工具链与开源项目",
+    tag: "Resource",
+  },
+  {
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-6 w-6 text-accent">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
+      </svg>
+    ),
+    title: "实战部署",
+    desc: "从开发到上线",
+    tag: "Deploy",
+  },
 ];
 
 const stats = [
-  { label: "总技能数", value: 1715, suffix: "+", color: "text-orange-400" },
-  { label: "分类数", value: 31, suffix: "", color: "text-blue-400" },
-  { label: "AI & LLM", value: 159, suffix: "", color: "text-emerald-400" },
-  { label: "搜索研究", value: 148, suffix: "", color: "text-violet-400" },
+  { label: "精选资源", value: totalGuides, suffix: "+", color: "text-orange-400" },
+  { label: "内容分类", value: types, suffix: " 个", color: "text-blue-400" },
+  { label: "来源平台", value: platforms, suffix: "+", color: "text-emerald-400" },
+  { label: "编辑精选", value: featuredCount, suffix: "", color: "text-violet-400" },
 ];
 
 export function SkillsShowcase() {
@@ -31,21 +85,20 @@ export function SkillsShowcase() {
       <div className="absolute top-1/3 right-0 w-[400px] h-[400px] bg-accent/3 rounded-full blur-[180px] pointer-events-none" />
 
       <div className="relative z-10 mx-auto max-w-6xl px-6">
-        {/* Header */}
         <div className="text-center mb-16">
           <FadeUp>
             <span className="text-sm font-mono text-accent tracking-widest uppercase">
-              {"1715+ 社区技能"}
+              {"资源总览"}
             </span>
           </FadeUp>
           <FadeUp delay={100}>
             <h2 className="mt-4 text-3xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight text-balance">
-              {"精选技能推荐"}
+              {"涵盖你需要的一切"}
             </h2>
           </FadeUp>
           <FadeUp delay={200}>
             <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto text-balance leading-relaxed">
-              {"来自 awesome-openclaw-skills 的精选技能，涵盖 31 个分类。一键安装，即刻增强你的 AI 助理能力。"}
+              {"BotGuide 按内容类型精心分类，从官方文档到社区教程，从视频课程到实战部署，满足不同学习偏好。"}
             </p>
           </FadeUp>
         </div>
@@ -57,24 +110,25 @@ export function SkillsShowcase() {
               <div className="group rounded-2xl border border-border bg-card p-6 lg:p-7 card-glow transition-all duration-300 h-full">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl lg:text-3xl">{cat.icon}</span>
-                    <h3 className="text-base lg:text-lg font-semibold text-foreground">
-                      {cat.title}
-                    </h3>
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 group-hover:bg-accent/15 transition-colors duration-300">
+                      {cat.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-base lg:text-lg font-semibold text-foreground">
+                        {cat.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground">{cat.desc}</p>
+                    </div>
                   </div>
-                  <span className="text-2xl lg:text-3xl font-bold text-accent font-mono">
-                    {cat.count}
-                  </span>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {cat.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="inline-flex items-center rounded-md bg-muted px-2.5 py-1 text-xs font-mono text-muted-foreground border border-border"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+                  <span className="inline-flex items-center rounded-md bg-muted px-2.5 py-1 text-xs font-mono text-muted-foreground border border-border">
+                    {cat.tag}
+                  </span>
+                  <span className="inline-flex items-center rounded-md bg-accent/5 px-2.5 py-1 text-xs font-mono text-accent border border-accent/20">
+                    {guides.filter((g) => g.type === cat.tag || cat.tag === "Deploy" && g.type === "Tool" || cat.tag === "Resource" && g.type === "Resource Collection").length || "N/A"}
+                    {" 篇"}
+                  </span>
                 </div>
               </div>
             </FadeUp>
@@ -83,7 +137,7 @@ export function SkillsShowcase() {
 
         {/* Stats row */}
         <FadeUp delay={300}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 rounded-2xl border border-border bg-card p-8 lg:p-10 mb-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 rounded-2xl border border-border bg-card p-8 lg:p-10">
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className={`text-3xl md:text-4xl lg:text-5xl font-bold font-mono ${stat.color}`}>
@@ -92,49 +146,6 @@ export function SkillsShowcase() {
                 <p className="mt-2 text-sm md:text-base text-muted-foreground">{stat.label}</p>
               </div>
             ))}
-          </div>
-        </FadeUp>
-
-        {/* CLI Install */}
-        <FadeUp delay={400}>
-          <div className="rounded-2xl border border-border bg-card p-8 lg:p-10">
-            <h3 className="text-xl lg:text-2xl font-bold text-foreground mb-2">
-              {"一键安装任意技能"}
-            </h3>
-            <p className="text-sm lg:text-base text-muted-foreground mb-6">
-              {"使用 ClawHub CLI 快速安装"}
-            </p>
-            <div className="rounded-xl bg-muted/50 border border-border px-6 py-4 font-mono text-sm md:text-base text-accent overflow-x-auto">
-              {"npx clawhub@latest install <skill-name>"}
-            </div>
-
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="https://github.com/nicepkg/openclaw"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 rounded-xl bg-card border border-border px-8 py-3.5 text-base font-medium text-foreground transition-all duration-300 hover:border-accent/30 hover:bg-accent/5"
-              >
-                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                </svg>
-                <span>{"浏览完整列表"}</span>
-                <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                </svg>
-              </a>
-              <a
-                href="https://clawhub.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 rounded-xl bg-accent px-8 py-3.5 text-base font-semibold text-accent-foreground transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,229,255,0.3)]"
-              >
-                <span>{"访问 ClawHub"}</span>
-                <svg className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                </svg>
-              </a>
-            </div>
           </div>
         </FadeUp>
       </div>

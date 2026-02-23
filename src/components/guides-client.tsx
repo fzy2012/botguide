@@ -55,7 +55,7 @@ export function GuidesClient() {
         </FadeUp>
         <FadeUp delay={200}>
           <p className="text-center text-lg md:text-xl text-muted-foreground max-w-lg mx-auto mb-8">
-            {"浏览 " + guides.length + " 篇精选 OpenClaw 学习资源"}
+            {"浏览 " + guides.length + " 篇精选 AI Agent 学习资源"}
           </p>
         </FadeUp>
 

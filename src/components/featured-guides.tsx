@@ -27,7 +27,7 @@ export function FeaturedGuides() {
             </FadeUp>
             <FadeUp delay={200}>
               <p className="mt-4 text-lg md:text-xl text-muted-foreground">
-                编辑精选的高质量 OpenClaw 学习资源
+                编辑精选的高质量 AI Agent 学习资源
               </p>
             </FadeUp>
           </div>
@@ -110,7 +110,7 @@ export function FeaturedGuides() {
             <p className="text-sm lg:text-base text-muted-foreground">
               {"持续更新中 \u00B7 "}
               <a
-                href="https://github.com/nicepkg/openclaw"
+                href="https://github.com/fzy2012/botguide"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-accent hover:underline"

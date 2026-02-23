@@ -15,10 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OpenClaw 指南 | BotGuide - 入行 365",
+  title: "BotGuide - AI Agent 学习指南 | 入行 365",
   description:
-    "OpenClaw AI Agent 全面指南集合 - 从入门教程到高级开发，一站式掌握 OpenClaw 生态。入行 365 旗下产品。",
-  keywords: ["OpenClaw", "AI Agent", "入行365", "BotGuide", "教程", "指南"],
+    "入行 365 旗下 AI Agent 知识库，精选全网优质教程、工具与实战资源，从入门到精通一站式学习。",
+  keywords: ["AI Agent", "入行365", "BotGuide", "教程", "指南", "学习路线"],
 };
 
 export const viewport: Viewport = {

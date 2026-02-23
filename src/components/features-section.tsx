@@ -80,7 +80,7 @@ export function FeaturesSection() {
           </FadeUp>
           <FadeUp delay={200}>
             <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto text-balance">
-              {"不只是链接收藏，而是经过精心分类和标注的 OpenClaw 学习路线图"}
+              {"不只是链接收藏，而是经过精心分类和标注的 AI Agent 学习路线图"}
             </p>
           </FadeUp>
         </div>

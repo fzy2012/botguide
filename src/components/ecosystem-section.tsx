@@ -40,8 +40,8 @@ const ecosystem = [
     tag: "Agent",
   },
   {
-    name: "OpenClaw Skills",
-    desc: "Skills 技能集合",
+    name: "BotSkills 集合",
+    desc: "AI Agent 技能集合",
     href: "https://botskills.ruhang365.cn",
     tag: "Skills",
   },

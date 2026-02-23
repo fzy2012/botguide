@@ -11,22 +11,21 @@ const ecosystem = [
 const tools = [
   { label: "AI 订阅后悔药", href: "https://sub.ruhang365.cn" },
   { label: "Agent 学习", href: "https://adpc.ruhang365.cn" },
-  { label: "OpenClaw Skills", href: "https://botskills.ruhang365.cn" },
-  { label: "OpenClaw 指南", href: "https://botguide.ruhang365.cn" },
+  { label: "BotSkills 集合", href: "https://botskills.ruhang365.cn" },
+  { label: "BotGuide 指南", href: "https://botguide.ruhang365.cn" },
   { label: "AiCoding 指南", href: "https://ruhangcodeguide.ruhang365.cn" },
 ];
 
 const resources = [
-  { label: "OpenClaw 官方文档", href: "https://docs.openclaw.ai" },
-  { label: "GitHub 仓库", href: "https://github.com/openclaw/openclaw" },
-  { label: "ClawHub 技能市场", href: "https://clawhub.com" },
-  { label: "Discord 社区", href: "https://discord.com/invite/clawd" },
+  { label: "BotGuide 指南库", href: "/guides" },
+  { label: "学习路线图", href: "/#learning-path" },
+  { label: "GitHub 仓库", href: "https://github.com/fzy2012/botguide" },
+  { label: "入行 365 社区", href: "https://ruhang365.cn" },
 ];
 
 export function Footer() {
   return (
     <footer className="relative border-t border-border bg-background">
-      {/* Top glow line */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-1/2 bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-6 py-16">
@@ -54,15 +53,12 @@ export function Footer() {
                   BotGuide
                 </span>
                 <span className="text-[10px] text-muted-foreground font-mono">
-                  OpenClaw 指南
+                  AI Agent 学习指南
                 </span>
               </div>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              OpenClaw AI Agent 全面指南集合，从入门到精通，助你快速掌握 AI Agent 开发与部署。
-            </p>
-            <p className="text-xs text-muted-foreground/60 font-mono">
-              {"入行 365 旗下产品"}
+              {"入行 365 旗下 AI Agent 知识库，精选全网优质教程、工具与实战资源，助你快速掌握 AI Agent 开发与应用。"}
             </p>
           </div>
 
@@ -111,19 +107,28 @@ export function Footer() {
           {/* Resources */}
           <div>
             <h3 className="text-xs font-semibold text-foreground uppercase tracking-widest mb-4">
-              OpenClaw 资源
+              快速导航
             </h3>
             <ul className="flex flex-col gap-2.5">
               {resources.map((link) => (
                 <li key={link.href}>
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-muted-foreground hover:text-accent transition-colors duration-200"
-                  >
-                    {link.label}
-                  </a>
+                  {link.href.startsWith("/") ? (
+                    <Link
+                      href={link.href}
+                      className="text-sm text-muted-foreground hover:text-accent transition-colors duration-200"
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-muted-foreground hover:text-accent transition-colors duration-200"
+                    >
+                      {link.label}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>

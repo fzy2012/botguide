@@ -1,5 +1,5 @@
 import { Hero } from "@/components/hero";
-import { WhatIsOpenClaw } from "@/components/what-is-openclaw";
+import { WhyBotGuide } from "@/components/what-is-openclaw";
 import { LearningPath } from "@/components/learning-path";
 import { SkillsShowcase } from "@/components/skills-showcase";
 import { ResourceAggregation } from "@/components/resource-aggregation";
@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <WhatIsOpenClaw />
+      <WhyBotGuide />
       <LearningPath />
       <SkillsShowcase />
       <ResourceAggregation />

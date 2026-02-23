@@ -2,20 +2,26 @@
 
 import Link from "next/link";
 import { FadeUp, AnimatedCounter } from "./animated-text";
+import { guides } from "@/data/guides";
 
-const sources = [
-  "Alibaba Cloud",
-  "Tencent Cloud",
-  "DigitalOcean",
-  "Hostinger",
-  "IBM",
-  "Codecademy",
+const totalGuides = guides.length;
+const cnGuides = guides.filter((g) => g.language === "Chinese").length;
+const enGuides = guides.filter((g) => g.language === "English").length;
+const types = new Set(guides.map((g) => g.type)).size;
+
+const platforms = [
   "Bilibili",
   "CSDN",
-  "Reddit",
-  "freeCodeCamp",
+  "DigitalOcean",
   "YouTube",
   "Medium",
+  "freeCodeCamp",
+  "Hostinger",
+  "Tencent Cloud",
+  "Alibaba Cloud",
+  "Reddit",
+  "GitHub",
+  "Dev.to",
 ];
 
 export function ResourceAggregation() {
@@ -27,54 +33,29 @@ export function ResourceAggregation() {
         <div className="text-center mb-12">
           <FadeUp>
             <span className="text-sm font-mono text-accent tracking-widest uppercase">
-              {"精选收录"}
+              {"Curated Resources"}
             </span>
           </FadeUp>
           <FadeUp delay={100}>
             <h2 className="mt-4 text-3xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight text-balance">
-              {"全网优质资源聚合"}
+              {"全网精选，一站收录"}
             </h2>
           </FadeUp>
           <FadeUp delay={200}>
             <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto text-balance leading-relaxed">
-              {"从阿里云、腾讯云到 DigitalOcean，从 B站到 Codecademy \u2014\u2014 一站式获取 OpenClaw 最佳教程。"}
+              {"BotGuide 从数十个平台精选优质内容，帮你省去大海捞针的时间，直达高质量学习资源。"}
             </p>
           </FadeUp>
         </div>
-
-        {/* Security Warning */}
-        <FadeUp delay={250}>
-          <div className="mb-12 rounded-2xl border border-amber-500/30 bg-amber-500/5 p-6 lg:p-8">
-            <div className="flex items-start gap-4">
-              <span className="text-2xl shrink-0">{"\u26A0\uFE0F"}</span>
-              <div>
-                <p className="text-base lg:text-lg text-foreground font-semibold mb-1">
-                  {"安全提醒"}
-                </p>
-                <p className="text-sm lg:text-base text-muted-foreground leading-relaxed">
-                  {"近期发现有恶意 Skills 通过 ClawHub 分发，窃取用户数据。安装第三方 Skill 前请务必检查源码，优先使用官方或社区审核的 Skills。"}
-                  <a
-                    href="https://thehackernews.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="ml-1 text-accent hover:underline"
-                  >
-                    {"详情 \u2197"}
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </FadeUp>
 
         {/* Stats */}
         <FadeUp delay={300}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
             {[
-              { label: "篇教程", value: 293, suffix: "+", color: "text-orange-400" },
-              { label: "中文资源", value: 46, suffix: "", color: "text-blue-400" },
-              { label: "英文资源", value: 247, suffix: "", color: "text-emerald-400" },
-              { label: "大分类", value: 9, suffix: "", color: "text-violet-400" },
+              { label: "篇精选资源", value: totalGuides, suffix: "+", color: "text-orange-400" },
+              { label: "中文资源", value: cnGuides, suffix: "", color: "text-blue-400" },
+              { label: "英文资源", value: enGuides, suffix: "", color: "text-emerald-400" },
+              { label: "内容分类", value: types, suffix: " 个", color: "text-violet-400" },
             ].map((stat) => (
               <div
                 key={stat.label}
@@ -89,11 +70,11 @@ export function ResourceAggregation() {
           </div>
         </FadeUp>
 
-        {/* Source badges */}
+        {/* Platform badges */}
         <FadeUp delay={400}>
           <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
             <span className="text-sm text-muted-foreground mr-2">{"收录来源："}</span>
-            {sources.map((source) => (
+            {platforms.map((source) => (
               <span
                 key={source}
                 className="inline-flex items-center rounded-lg border border-border bg-card px-4 py-2 text-sm text-muted-foreground hover:border-accent/30 hover:text-foreground transition-all duration-200 cursor-default"
@@ -111,7 +92,7 @@ export function ResourceAggregation() {
               href="/guides"
               className="group inline-flex items-center gap-2 rounded-xl bg-accent px-10 py-4 text-base font-semibold text-accent-foreground transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,229,255,0.3)]"
             >
-              <span>{"查看全部 293+ 篇资源"}</span>
+              <span>{"查看全部 " + totalGuides + " 篇资源"}</span>
               <svg className="h-5 w-5 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
               </svg>
