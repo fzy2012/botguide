@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 const navLinks = [
   { label: "首页", href: "/" },
   { label: "指南库", href: "/guides" },
+  { label: "7天路径", href: "#learning-path" },
+  { label: "技能市场", href: "#skills" },
   { label: "关于", href: "#about" },
 ];
 

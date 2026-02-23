@@ -55,44 +55,44 @@ const ecosystem = [
 
 export function EcosystemSection() {
   return (
-    <section className="relative py-32">
+    <section className="relative py-24 lg:py-32">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-accent/3 rounded-full blur-[180px] pointer-events-none" />
 
-      <div className="relative z-10 mx-auto max-w-7xl px-6">
+      <div className="relative z-10 mx-auto max-w-6xl px-6">
         <div className="text-center mb-16">
           <FadeUp>
-            <span className="text-xs font-mono text-accent tracking-widest uppercase">
+            <span className="text-sm font-mono text-accent tracking-widest uppercase">
               Ecosystem
             </span>
           </FadeUp>
           <FadeUp delay={100}>
-            <h2 className="mt-4 text-3xl md:text-4xl font-bold text-foreground tracking-tight text-balance">
+            <h2 className="mt-4 text-3xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight text-balance">
               {"入行 365 生态"}
             </h2>
           </FadeUp>
           <FadeUp delay={200}>
-            <p className="mt-4 text-muted-foreground max-w-lg mx-auto text-balance">
-              BotGuide 是入行 365 生态的重要一环，与其他产品紧密协同
+            <p className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto text-balance">
+              {"BotGuide 是入行 365 生态的重要一环，与其他产品紧密协同"}
             </p>
           </FadeUp>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {ecosystem.map((item, i) => (
             <FadeUp key={item.href} delay={i * 60}>
               <a
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative flex flex-col rounded-xl border border-border bg-card p-6 card-glow transition-all duration-300"
+                className="group relative flex flex-col rounded-2xl border border-border bg-card p-7 lg:p-8 card-glow transition-all duration-300"
               >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="inline-flex items-center rounded-md bg-accent/10 px-2 py-0.5 text-[10px] font-mono font-medium text-accent border border-accent/20">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="inline-flex items-center rounded-lg bg-accent/10 px-3 py-1 text-xs font-mono font-semibold text-accent border border-accent/20">
                     {item.tag}
                   </span>
                   <svg
-                    className="h-3.5 w-3.5 text-muted-foreground/30 group-hover:text-accent transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    className="h-4 w-4 text-muted-foreground/30 group-hover:text-accent transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -101,10 +101,10 @@ export function EcosystemSection() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
                   </svg>
                 </div>
-                <h3 className="text-sm font-semibold text-foreground mb-1 group-hover:text-accent transition-colors duration-200">
+                <h3 className="text-lg lg:text-xl font-semibold text-foreground mb-2 group-hover:text-accent transition-colors duration-200">
                   {item.name}
                 </h3>
-                <p className="text-xs text-muted-foreground">{item.desc}</p>
+                <p className="text-sm lg:text-base text-muted-foreground">{item.desc}</p>
               </a>
             </FadeUp>
           ))}

@@ -49,12 +49,12 @@ export function GuidesClient() {
         </FadeUp>
 
         <FadeUp delay={100}>
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground text-center tracking-tight mb-3">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground text-center tracking-tight mb-4">
             指南库
           </h1>
         </FadeUp>
         <FadeUp delay={200}>
-          <p className="text-center text-muted-foreground max-w-lg mx-auto mb-8">
+          <p className="text-center text-lg md:text-xl text-muted-foreground max-w-lg mx-auto mb-8">
             {"浏览 " + guides.length + " 篇精选 OpenClaw 学习资源"}
           </p>
         </FadeUp>
@@ -225,10 +225,10 @@ function GuideCard({ guide, index }: { guide: Guide; index: number }) {
       </div>
 
       {/* Content */}
-      <h3 className="text-sm font-semibold text-foreground mb-2 group-hover:text-accent transition-colors duration-200 line-clamp-2">
+      <h3 className="text-base font-semibold text-foreground mb-2 group-hover:text-accent transition-colors duration-200 line-clamp-2">
         {guide.name}
       </h3>
-      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 flex-1 mb-4">
+      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 flex-1 mb-4">
         {guide.description}
       </p>
 
