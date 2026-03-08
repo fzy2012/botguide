@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { guides, type Guide } from "@/data/guides";
 import { getTypeIcon, getTypeColor, guideTypes } from "@/lib/guide-utils";
 import { FadeUp } from "./animated-text";
@@ -8,9 +9,17 @@ import { FadeUp } from "./animated-text";
 const languages = ["全部", "Chinese", "English"] as const;
 
 export function GuidesClient() {
+  const searchParams = useSearchParams();
+  const initialType = searchParams.get("type") || "全部";
+
   const [search, setSearch] = useState("");
-  const [selectedType, setSelectedType] = useState<string>("全部");
+  const [selectedType, setSelectedType] = useState<string>(initialType);
   const [selectedLang, setSelectedLang] = useState<string>("全部");
+
+  useEffect(() => {
+    const type = searchParams.get("type");
+    if (type) setSelectedType(type);
+  }, [searchParams]);
 
   const filtered = useMemo(() => {
     return guides.filter((g) => {

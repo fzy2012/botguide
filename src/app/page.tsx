@@ -1,4 +1,5 @@
 import { Hero } from "@/components/hero";
+import { OnboardingSteps } from "@/components/onboarding-steps";
 import { WhyBotGuide } from "@/components/what-is-openclaw";
 import { LearningPath } from "@/components/learning-path";
 import { SkillsShowcase } from "@/components/skills-showcase";
@@ -12,6 +13,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <OnboardingSteps />
       <WhyBotGuide />
       <LearningPath />
       <SkillsShowcase />
