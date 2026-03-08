@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FadeUp, AnimatedCounter } from "./animated-text";
 import { guides } from "@/data/guides";
 
@@ -18,6 +19,7 @@ const categories = [
     title: "官方文档",
     desc: "第一手权威资料",
     tag: "Official",
+    href: "/guides?type=Official",
   },
   {
     icon: (
@@ -28,6 +30,7 @@ const categories = [
     title: "教程指南",
     desc: "循序渐进学习",
     tag: "Tutorial",
+    href: "/guides?type=Tutorial",
   },
   {
     icon: (
@@ -38,6 +41,7 @@ const categories = [
     title: "深度文章",
     desc: "案例与深度分析",
     tag: "Article",
+    href: "/guides?type=Article",
   },
   {
     icon: (
@@ -48,6 +52,7 @@ const categories = [
     title: "视频课程",
     desc: "可视化学习体验",
     tag: "Video",
+    href: "/guides?type=Video",
   },
   {
     icon: (
@@ -58,6 +63,7 @@ const categories = [
     title: "资源合集",
     desc: "工具链与开源项目",
     tag: "Resource",
+    href: "/guides?type=Resource",
   },
   {
     icon: (
@@ -67,7 +73,8 @@ const categories = [
     ),
     title: "实战部署",
     desc: "从开发到上线",
-    tag: "Deploy",
+    tag: "Development",
+    href: "/guides?type=Development",
   },
 ];
 
@@ -107,30 +114,33 @@ export function SkillsShowcase() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
           {categories.map((cat, i) => (
             <FadeUp key={cat.title} delay={i * 60}>
-              <div className="group rounded-2xl border border-border bg-card p-6 lg:p-7 card-glow transition-all duration-300 h-full">
+              <Link href={cat.href} className="group rounded-2xl border border-border bg-card p-6 lg:p-7 card-glow transition-all duration-300 h-full block">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 group-hover:bg-accent/15 transition-colors duration-300">
                       {cat.icon}
                     </div>
                     <div>
-                      <h3 className="text-base lg:text-lg font-semibold text-foreground">
+                      <h3 className="text-base lg:text-lg font-semibold text-foreground group-hover:text-accent transition-colors duration-200">
                         {cat.title}
                       </h3>
                       <p className="text-xs text-muted-foreground">{cat.desc}</p>
                     </div>
                   </div>
+                  <svg className="h-4 w-4 text-muted-foreground/30 group-hover:text-accent transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+                  </svg>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <span className="inline-flex items-center rounded-md bg-muted px-2.5 py-1 text-xs font-mono text-muted-foreground border border-border">
                     {cat.tag}
                   </span>
                   <span className="inline-flex items-center rounded-md bg-accent/5 px-2.5 py-1 text-xs font-mono text-accent border border-accent/20">
-                    {guides.filter((g) => g.type === cat.tag || cat.tag === "Deploy" && g.type === "Tool" || cat.tag === "Resource" && g.type === "Resource Collection").length || "N/A"}
+                    {guides.filter((g) => g.type === cat.tag).length || 0}
                     {" 篇"}
                   </span>
                 </div>
-              </div>
+              </Link>
             </FadeUp>
           ))}
         </div>
