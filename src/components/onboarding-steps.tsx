@@ -7,10 +7,10 @@ const steps = [
   {
     step: 1,
     title: "安装 OpenClaw",
-    desc: "下载并安装 OpenClaw，开启你的 AI Agent 之旅。安装完成后即可创建和运行你的第一个 Agent。",
-    href: "https://openclaw.ai",
-    external: true,
-    cta: "前往安装",
+    desc: "一步步跟着指南安装并配置 OpenClaw，从下载到第一次对话，全程不超过 10 分钟。",
+    href: "/get-started",
+    external: false,
+    cta: "查看安装指南",
     accent: true,
   },
   {
