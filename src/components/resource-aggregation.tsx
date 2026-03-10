@@ -75,12 +75,13 @@ export function ResourceAggregation() {
           <div className="flex flex-wrap items-center justify-center gap-3 mb-12">
             <span className="text-sm text-muted-foreground mr-2">{"收录来源："}</span>
             {platforms.map((source) => (
-              <span
+              <Link
                 key={source}
-                className="inline-flex items-center rounded-lg border border-border bg-card px-4 py-2 text-sm text-muted-foreground hover:border-accent/30 hover:text-foreground transition-all duration-200 cursor-default"
+                href={`/guides?q=${encodeURIComponent(source)}`}
+                className="inline-flex items-center rounded-lg border border-border bg-card px-4 py-2 text-sm text-muted-foreground hover:border-accent/30 hover:text-accent transition-all duration-200"
               >
                 {source}
-              </span>
+              </Link>
             ))}
           </div>
         </FadeUp>

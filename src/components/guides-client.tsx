@@ -11,14 +11,17 @@ const languages = ["全部", "Chinese", "English"] as const;
 export function GuidesClient() {
   const searchParams = useSearchParams();
   const initialType = searchParams.get("type") || "全部";
+  const initialSearch = searchParams.get("q") || "";
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(initialSearch);
   const [selectedType, setSelectedType] = useState<string>(initialType);
   const [selectedLang, setSelectedLang] = useState<string>("全部");
 
   useEffect(() => {
     const type = searchParams.get("type");
+    const q = searchParams.get("q");
     if (type) setSelectedType(type);
+    if (q) setSearch(q);
   }, [searchParams]);
 
   const filtered = useMemo(() => {

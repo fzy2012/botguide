@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FadeUp } from "./animated-text";
 
 const features = [
@@ -12,6 +13,8 @@ const features = [
     title: "体系化学习路径",
     description:
       "从 AI Agent 基础概念到高级应用，BotGuide 为你规划清晰的学习路线，告别碎片化学习。",
+    href: "/#learning-path",
+    external: false,
   },
   {
     icon: (
@@ -22,6 +25,8 @@ const features = [
     title: "全网精选聚合",
     description:
       "从 Bilibili、CSDN 到 DigitalOcean、Medium，聚合中英文全网优质 AI Agent 教程与实战文章。",
+    href: "/guides",
+    external: false,
   },
   {
     icon: (
@@ -32,6 +37,8 @@ const features = [
     title: "入行 365 生态互联",
     description:
       "与入行日报、Agent 学习、AiCoding 指南等产品深度联动，构建完整的 AI 学习生态。",
+    href: "https://ruhang365.cn",
+    external: true,
   },
 ];
 
@@ -63,21 +70,48 @@ export function WhyBotGuide() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {features.map((feature, i) => (
             <FadeUp key={feature.title} delay={i * 120}>
-              <div className="group relative rounded-2xl border border-border bg-card p-8 lg:p-10 card-glow transition-all duration-300 h-full">
-                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent/10 mb-6 group-hover:bg-accent/15 transition-colors duration-300">
-                  {feature.icon}
-                </div>
-                <h3 className="text-xl lg:text-2xl font-semibold text-foreground mb-4">
-                  {feature.title}
-                </h3>
-                <p className="text-base lg:text-lg text-muted-foreground leading-relaxed">
-                  {feature.description}
-                </p>
-              </div>
+              {feature.external ? (
+                <a
+                  href={feature.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative flex flex-col rounded-2xl border border-border bg-card p-8 lg:p-10 card-glow transition-all duration-300 h-full"
+                >
+                  <FeatureCardContent feature={feature} />
+                </a>
+              ) : (
+                <Link
+                  href={feature.href}
+                  className="group relative flex flex-col rounded-2xl border border-border bg-card p-8 lg:p-10 card-glow transition-all duration-300 h-full"
+                >
+                  <FeatureCardContent feature={feature} />
+                </Link>
+              )}
             </FadeUp>
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function FeatureCardContent({ feature }: { feature: typeof features[number] }) {
+  return (
+    <>
+      <div className="flex items-start justify-between mb-6">
+        <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent/10 group-hover:bg-accent/15 transition-colors duration-300">
+          {feature.icon}
+        </div>
+        <svg className="h-4 w-4 text-muted-foreground/20 group-hover:text-accent transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
+        </svg>
+      </div>
+      <h3 className="text-xl lg:text-2xl font-semibold text-foreground mb-4 group-hover:text-accent transition-colors duration-200">
+        {feature.title}
+      </h3>
+      <p className="text-base lg:text-lg text-muted-foreground leading-relaxed">
+        {feature.description}
+      </p>
+    </>
   );
 }
