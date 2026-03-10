@@ -7,7 +7,7 @@ const steps = [
   {
     step: 1,
     title: "安装 OpenClaw",
-    desc: "一步步跟着指南安装并配置 OpenClaw，从下载到第一次对话，全程不超过 10 分钟。",
+    desc: "OpenClaw 是自托管平台，根据你的情况选择部署方式，跟着对应教程一步步操作。",
     href: "/get-started",
     external: false,
     cta: "查看安装指南",
