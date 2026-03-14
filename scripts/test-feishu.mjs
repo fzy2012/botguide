@@ -1,5 +1,5 @@
 /**
- * Quick smoke-test for Feishu credentials and wiki node retrieval.
+ * Smoke-test for Feishu credentials.
  * Run: node scripts/test-feishu.mjs
  */
 
@@ -11,7 +11,9 @@ const envFile = resolve(process.cwd(), ".env.local");
 try {
   const lines = readFileSync(envFile, "utf8").split("\n");
   for (const line of lines) {
-    const [key, ...rest] = line.split("=");
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const [key, ...rest] = trimmed.split("=");
     if (key && rest.length) process.env[key.trim()] = rest.join("=").trim();
   }
 } catch {
@@ -19,8 +21,6 @@ try {
 }
 
 const FEISHU_BASE_URL = "https://open.feishu.cn/open-apis";
-// Set FEISHU_WIKI_NODE_TOKEN in .env.local to your ntn_* wiki node token
-const NODE_TOKEN = process.env.FEISHU_WIKI_NODE_TOKEN;
 
 async function getTenantToken() {
   const res = await fetch(`${FEISHU_BASE_URL}/auth/v3/tenant_access_token/internal`, {
@@ -32,7 +32,7 @@ async function getTenantToken() {
     }),
   });
   const data = await res.json();
-  if (data.code !== 0) throw new Error(`Auth failed: ${data.msg}`);
+  if (data.code !== 0) throw new Error(`Auth failed (${data.code}): ${data.msg}`);
   return data.tenant_access_token;
 }
 
@@ -40,18 +40,12 @@ async function feishuGet(path, token) {
   const res = await fetch(`${FEISHU_BASE_URL}${path}`, {
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
   });
-  const json = await res.json();
-  return json;
+  return res.json();
 }
 
 async function main() {
   console.log("=== Feishu Integration Test ===\n");
   console.log("App ID:", process.env.FEISHU_APP_ID);
-
-  if (!NODE_TOKEN) {
-    console.error("Set FEISHU_WIKI_NODE_TOKEN in .env.local and re-run.");
-    process.exit(1);
-  }
 
   // 1. Get tenant access token
   console.log("\n[1] Getting tenant access token...");
@@ -64,66 +58,34 @@ async function main() {
     process.exit(1);
   }
 
-  // 2. Try fetching wiki node with tenant token
-  console.log(`\n[2] Fetching wiki node (tenant token): ${NODE_TOKEN}`);
-  const tenantNodeRes = await feishuGet(
-    `/wiki/v2/spaces/get_node?token=${encodeURIComponent(NODE_TOKEN)}`,
-    tenantToken
-  );
-  if (tenantNodeRes.code === 0) {
-    const node = tenantNodeRes.data.node;
-    console.log("    ✓ Node title:", node.title);
-    console.log("      obj_type:", node.obj_type);
-    console.log("      obj_token:", node.obj_token);
-    console.log("      space_id:", node.space_id);
-
-    // 3. Fetch document content
-    if (node.obj_type === "docx" || node.obj_type === "doc") {
-      console.log("\n[3] Fetching document content...");
-      const docRes = await feishuGet(
-        `/docx/v1/documents/${node.obj_token}/raw_content`,
-        tenantToken
-      );
-      if (docRes.code === 0) {
-        const preview = docRes.data.content.slice(0, 300).replace(/\n/g, " ");
-        console.log("    ✓ Content preview:", preview + (docRes.data.content.length > 300 ? "..." : ""));
-      } else {
-        console.warn("    ✗ Doc fetch failed:", docRes.code, docRes.msg);
-      }
+  // 2. List wiki spaces accessible to this app
+  console.log("\n[2] Listing wiki spaces (tenant token)...");
+  const spacesRes = await feishuGet("/wiki/v2/spaces", tenantToken);
+  if (spacesRes.code === 0) {
+    const spaces = spacesRes.data?.items ?? [];
+    if (spaces.length === 0) {
+      console.log("    (no spaces accessible – add the app as a wiki member)");
+    } else {
+      spaces.forEach((s) => console.log(`    ✓ ${s.name} (${s.space_id})`));
     }
   } else {
-    console.warn("    ✗ Tenant token failed:", tenantNodeRes.code, tenantNodeRes.msg);
+    console.warn("    ✗", spacesRes.code, spacesRes.msg);
+  }
 
-    // 3. Retry with user access token
-    const userToken = process.env.FEISHU_USER_ACCESS_TOKEN;
-    if (userToken) {
-      console.log("\n[3] Retrying with user access token...");
-      const userNodeRes = await feishuGet(
-        `/wiki/v2/spaces/get_node?token=${encodeURIComponent(NODE_TOKEN)}`,
-        userToken
-      );
-      if (userNodeRes.code === 0) {
-        const node = userNodeRes.data.node;
-        console.log("    ✓ Node title:", node.title);
-        console.log("      obj_type:", node.obj_type);
-        console.log("      obj_token:", node.obj_token);
-
-        if (node.obj_type === "docx" || node.obj_type === "doc") {
-          console.log("\n[4] Fetching document content with user token...");
-          const docRes = await feishuGet(
-            `/docx/v1/documents/${node.obj_token}/raw_content`,
-            userToken
-          );
-          if (docRes.code === 0) {
-            const preview = docRes.data.content.slice(0, 300).replace(/\n/g, " ");
-            console.log("    ✓ Content preview:", preview + (docRes.data.content.length > 300 ? "..." : ""));
-          } else {
-            console.warn("    ✗ Doc fetch failed:", docRes.code, docRes.msg);
-          }
-        }
+  // 3. Retry step 2 with user access token
+  const userToken = process.env.FEISHU_USER_ACCESS_TOKEN;
+  if (userToken) {
+    console.log("\n[3] Listing wiki spaces (user access token)...");
+    const userSpacesRes = await feishuGet("/wiki/v2/spaces", userToken);
+    if (userSpacesRes.code === 0) {
+      const spaces = userSpacesRes.data?.items ?? [];
+      if (spaces.length === 0) {
+        console.log("    (no spaces returned for this user)");
       } else {
-        console.error("    ✗ User token also failed:", userNodeRes.code, userNodeRes.msg);
+        spaces.forEach((s) => console.log(`    ✓ ${s.name} (${s.space_id})`));
       }
+    } else {
+      console.warn("    ✗", userSpacesRes.code, userSpacesRes.msg);
     }
   }
 
