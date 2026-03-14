@@ -7,8 +7,9 @@
  * - Feishu Sheets (飞书表格)
  *
  * Required environment variables:
- *   FEISHU_APP_ID     - Your Feishu app ID (AppID)
- *   FEISHU_APP_SECRET - Your Feishu app secret (AppSecret)
+ *   FEISHU_APP_ID              - Your Feishu app ID (AppID)
+ *   FEISHU_APP_SECRET          - Your Feishu app secret (AppSecret)
+ *   FEISHU_USER_ACCESS_TOKEN   - (optional) User access token for personal-space content
  */
 
 const FEISHU_BASE_URL = "https://open.feishu.cn/open-apis";
@@ -142,8 +143,21 @@ export async function getTenantAccessToken(): Promise<string> {
   return cachedToken;
 }
 
-async function feishuGet<T>(path: string): Promise<T> {
-  const token = await getTenantAccessToken();
+/**
+ * Get the user access token from env (does not refresh – caller must ensure freshness).
+ */
+export function getUserAccessToken(): string {
+  const token = process.env.FEISHU_USER_ACCESS_TOKEN;
+  if (!token) {
+    throw new Error(
+      "Missing FEISHU_USER_ACCESS_TOKEN environment variable."
+    );
+  }
+  return token;
+}
+
+async function feishuGet<T>(path: string, useUserToken = false): Promise<T> {
+  const token = useUserToken ? getUserAccessToken() : await getTenantAccessToken();
   const res = await fetch(`${FEISHU_BASE_URL}${path}`, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -352,6 +366,51 @@ export async function getWikiNode(
     `/wiki/v2/spaces/${spaceId}/nodes/${nodeToken}`
   );
   return data.node;
+}
+
+/**
+ * Look up a wiki node by its token alone (no space_id needed).
+ * Works with `ntn_*` tokens. Falls back to user access token if tenant token fails.
+ *
+ * @param nodeToken - The wiki node token (e.g. ntn_xxxxxxxx)
+ */
+export async function getWikiNodeByToken(nodeToken: string): Promise<FeishuWikiNode> {
+  // Try tenant token first, then user token
+  for (const useUserToken of [false, true]) {
+    try {
+      const data = await feishuGet<{ node: FeishuWikiNode }>(
+        `/wiki/v2/spaces/get_node?token=${encodeURIComponent(nodeToken)}`,
+        useUserToken
+      );
+      return data.node;
+    } catch (err) {
+      if (!useUserToken) continue; // try again with user token
+      throw err;
+    }
+  }
+  throw new Error("Unreachable");
+}
+
+/**
+ * Retrieve the full text content of a wiki node.
+ * Resolves the node to its underlying document and fetches raw content.
+ *
+ * @param nodeToken - The wiki node token (e.g. ntn_xxxxxxxx)
+ */
+export async function getWikiNodeContent(
+  nodeToken: string
+): Promise<{ node: FeishuWikiNode; content: string }> {
+  const node = await getWikiNodeByToken(nodeToken);
+
+  if (node.obj_type !== "docx" && node.obj_type !== "doc") {
+    throw new Error(
+      `Wiki node "${node.title}" has type "${node.obj_type}" which is not a text document. ` +
+      `Only docx/doc nodes can be retrieved as text.`
+    );
+  }
+
+  const result = await getDocumentContent(node.obj_token);
+  return { node, content: result.content };
 }
 
 // ─── Sheets API ───────────────────────────────────────────────────────────────
